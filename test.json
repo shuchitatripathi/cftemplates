@@ -1,0 +1,54 @@
+{
+   "AWSTemplateFormatVersion": "2010-09-09",
+   "Description": "EC2",
+   "Parameters" : {
+     "TagValue": {
+       "Description": "Value of Dept tag",
+       "Type": "String"
+     }
+   },
+   "Resources": {
+      "EC2Instance": {
+         "Type": "AWS::EC2::Instance",
+         "Properties": {
+            "ImageId": "ami-03ed5bd63ba378bd8",
+            "InstanceType": "t2.micro",
+            "KeyName": "Shuchita_Sydney",
+            "SubnetId": "subnet-0f72f3599d03ad38b",
+            "SecurityGroupIds": [
+              "sg-06d1b599a307d7510"
+            ],
+            "Tags": [{
+              "Key": "Dept",
+              "Value": {"Ref": "TagValue"}
+            }],
+            "UserData": {
+              "Fn::Base64": {
+                "Fn::Join" : [
+                  "", [
+                    "#!/bin/bash\n",
+                    "curl https://st-jenkinsbucket1.s3-ap-southeast-1.amazonaws.com/createuser.sh > ./createuser.sh\n",
+                    "chmod 755 ./createuser.sh\n",
+                    "exec ./createuser.sh"
+                  ]
+                ]
+              }
+            }
+         }
+      }
+   },
+   "Outputs": {
+      "EC2IP": {
+         "Description": "IP of EC2",
+         "Value": {
+            "Fn::GetAtt": [
+               "EC2Instance",
+               "PublicIp"
+            ]
+         },
+         "Export": {
+            "Name": "EC2IP2"
+         }
+      }
+   }
+}
