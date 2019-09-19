@@ -3,7 +3,7 @@
    "Description": "EC2",
    "Parameters" : {
      "TagValue": {
-       "Description": "Value of Dept tag",
+       "Description": "Value of Dept tag1",
        "Type": "String"
      }
    },
